@@ -3,7 +3,8 @@ import { authenticate } from "../shopify.server";
 import db from "../db.server";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { topic, shop, session, admin } = await authenticate.webhook(request);
+  const { topic, shop, session, admin, payload } = await authenticate.webhook(request);
+  console.log("Webhook received", { topic, payload });
 
   if (!admin && topic !== 'SHOP_REDACT') {
     // The admin context isn't returned if the webhook fired after a shop was uninstalled.
@@ -20,6 +21,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         await db.session.deleteMany({ where: { shop } });
       }
 
+      break;
+    case "ORDERS_CREATE":
+      console.log("Order created", payload);
       break;
     case "CUSTOMERS_DATA_REQUEST":
     case "CUSTOMERS_REDACT":
