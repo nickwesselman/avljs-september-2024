@@ -16,7 +16,8 @@ export function run(input: RunInput): FunctionRunResult {
 
   // If they are logged in and a member, they can purchase anything
   const isAuthenticated = input.cart.buyerIdentity?.isAuthenticated;
-  if (isAuthenticated && input.cart.buyerIdentity?.customer?.isMember?.jsonValue) {
+  const isMember = input.cart.buyerIdentity?.customer?.isMember?.jsonValue === true;
+  if (isAuthenticated && isMember) {
     return noErrors;
   }
 
@@ -28,7 +29,7 @@ export function run(input: RunInput): FunctionRunResult {
       continue;
     }
 
-    if (line.merchandise.product.isMemberOnly?.jsonValue) {
+    if (line.merchandise.product.isMemberOnly?.jsonValue === true) {
       membersOnlyProduct = line.merchandise.product;
     } else if (line.merchandise.sku === "MEMBERSHIP") {
       cartContainsMembership = true;
@@ -48,7 +49,7 @@ export function run(input: RunInput): FunctionRunResult {
   }
 
   // They need to purchase a membership
-  if (membersOnlyProduct && !cartContainsMembership) {
+  if (membersOnlyProduct && !isMember && !cartContainsMembership) {
     return {
       errors: [
         {

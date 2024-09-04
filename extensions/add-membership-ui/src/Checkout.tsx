@@ -112,12 +112,12 @@ function App() {
   }
 
   // They're a member
-  if (isMemberMetafields.find(field => field.metafield.value)) {
+  if (isMemberMetafields.find(field => field.metafield.value === 'true')) {
     return null;
   }
 
   // There are no members-only products
-  if (!isMembersOnlyMetafields.find(field => field.metafield.value)) {
+  if (!isMembersOnlyMetafields.find(field => field.metafield.value === 'true')) {
     return null;
   }
 
