@@ -25,7 +25,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       break;
     case "ORDERS_CREATE":
       if (admin) {
-        await tagCustomerIfTheyBoughtMembership(payload, admin);
+        await updateCustomerIfTheyBoughtMembership(payload, admin);
       }
       break;
     case "CUSTOMERS_DATA_REQUEST":
@@ -38,34 +38,41 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   throw new Response();
 };
 
-async function tagCustomerIfTheyBoughtMembership(payload: Record<string, any>, admin: AdminApiContext) {
+async function updateCustomerIfTheyBoughtMembership(payload: Record<string, any>, admin: AdminApiContext) {
   if (!payload.line_items.find((lineItem: { sku: string; }) => lineItem.sku === 'MEMBERSHIP')) {
     console.log("No membership product found in order");
     return;
   }
 
   const customerId = payload.customer.admin_graphql_api_id;
-  console.log("Tagging customer as member:", customerId);
+  console.log("Marking customer as member:", customerId);
 
   const response = await admin.graphql(`#graphql
-    mutation addTags($id: ID!, $tags: [String!]!) {
-      tagsAdd(id: $id, tags: $tags) {
-        node {
+    mutation SaveMetafield($ownerId: ID!, $value: String!) {
+      metafieldsSet(metafields: {
+        ownerId: $ownerId,
+        namespace: "membership",
+        key: "isMember",
+        type: "boolean"
+        value: $value
+      }) {
+        metafields {
           id
         }
         userErrors {
           message
+          field
         }
       }
     }
   `, {
     variables: {
-      id: customerId,
-      tags: ["member"]
+      ownerId: customerId,
+      value: "true"
     }
   });
   const responseJson = await response.json();
-  if (responseJson.data?.tagsAdd?.userErrors?.length) {
-    console.error("Failed to tag customer as member", responseJson.data.addTags.userErrors);
+  if (responseJson.data?.metafieldsSet?.userErrors?.length) {
+    console.error("Failed to mark customer as member", responseJson.data.addTags.userErrors);
   }
 }

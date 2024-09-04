@@ -3,7 +3,7 @@
 client_id = "21987c6a6fa2887cae7254f0b9b894a9"
 name = "avljs-september-2024"
 handle = "avljs-september-2024"
-application_url = "https://costumes-mining-wants-stanford.trycloudflare.com"
+application_url = "https://petite-pain-prospect-georgia.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_orders,write_products,write_customers"
+scopes = "read_orders,write_customers,write_products"
 
 [auth]
 redirect_urls = [
-  "https://costumes-mining-wants-stanford.trycloudflare.com/auth/callback",
-  "https://costumes-mining-wants-stanford.trycloudflare.com/auth/shopify/callback",
-  "https://costumes-mining-wants-stanford.trycloudflare.com/api/auth/callback"
+  "https://petite-pain-prospect-georgia.trycloudflare.com/auth/callback",
+  "https://petite-pain-prospect-georgia.trycloudflare.com/auth/shopify/callback",
+  "https://petite-pain-prospect-georgia.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
