@@ -15,6 +15,7 @@ query RunInput {
       merchandise {
         __typename
         ... on ProductVariant {
+          sku
           product {
             title
             isMemberOnly: metafield(namespace: "membership", key: "isMembersOnly") {
