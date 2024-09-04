@@ -1,0 +1,23 @@
+query RunInput {
+  buyerJourney {
+    step
+  }
+  cart {
+    buyerIdentity {
+      customer {
+        isMember: hasAnyTag(tags: ["member"])
+      }
+    }
+    lines {
+      merchandise {
+        __typename
+        ... on ProductVariant {
+          product {
+            title
+            isMemberOnly: hasAnyTag(tags: ["members-only"])
+          }
+        }
+      }
+    }
+  }
+}
