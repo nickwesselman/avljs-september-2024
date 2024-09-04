@@ -26,8 +26,14 @@ redirect_urls = [
 api_version = "2024-07"
 
   [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled", "orders/create" ]
+  topics = [ "app/uninstalled"]
   uri = "/webhooks"
+
+  [[webhooks.subscriptions]]
+  topics = [ "orders/create" ]
+  uri = "/webhooks"
+  include_fields = ["id", "customer", "line_items"]
+  filter = "line_items.sku:MEMBERSHIP"
 
 [pos]
 embedded = false
