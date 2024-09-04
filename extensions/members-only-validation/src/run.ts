@@ -24,8 +24,8 @@ export function run(input: RunInput): FunctionRunResult {
       return {
         errors: [
           {
-            localizedMessage: `You must be a member to purchase ${line.merchandise.product.title}`,
-            target: "cart",
+            localizedMessage: `You must be a member to purchase ${line.merchandise.product.title}. Please purchase a membership first.`,
+            target: "$.cart",
           },
         ],
       };
