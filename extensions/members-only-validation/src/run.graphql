@@ -4,8 +4,11 @@ query RunInput {
   }
   cart {
     buyerIdentity {
+      isAuthenticated
       customer {
-        isMember: hasAnyTag(tags: ["member"])
+        isMember: metafield(namespace: "membership", key: "isMember") {
+          jsonValue
+        }
       }
     }
     lines {
@@ -14,7 +17,9 @@ query RunInput {
         ... on ProductVariant {
           product {
             title
-            isMemberOnly: hasAnyTag(tags: ["members-only"])
+            isMemberOnly: metafield(namespace: "membership", key: "isMembersOnly") {
+              jsonValue
+            }
           }
         }
       }

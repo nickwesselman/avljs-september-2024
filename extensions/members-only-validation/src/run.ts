@@ -13,18 +13,21 @@ export function run(input: RunInput): FunctionRunResult {
     return noErrors;
   }
 
-  if (input.cart.buyerIdentity?.customer?.isMember) {
+  if (input.cart.buyerIdentity?.isAuthenticated && input.cart.buyerIdentity?.customer?.isMember?.jsonValue) {
     return noErrors;
   }
 
   for (const line of input.cart.lines) {
-    if (line.merchandise.__typename === "ProductVariant" &&
-      line.merchandise.product.isMemberOnly
+    if (line.merchandise.__typename === "ProductVariant" && line.merchandise.product.isMemberOnly?.jsonValue
     ) {
+      const message = input.cart.buyerIdentity?.isAuthenticated ?
+        `You must be a member to purchase ${line.merchandise.product.title}. Please purchase a membership.` :
+        `You must be a logged-in member to purchase ${line.merchandise.product.title}. Please log in to validate your membership.`;
+
       return {
         errors: [
           {
-            localizedMessage: `You must be a member to purchase ${line.merchandise.product.title}. Please purchase a membership first.`,
+            localizedMessage: message,
             target: "$.cart",
           },
         ],
