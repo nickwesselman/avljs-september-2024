@@ -51,24 +51,24 @@ function App() {
     }
   }, [showError]);
 
-    async function handleAddToCart(variantId) {
-      setAdding(true);
-      const result = await applyCartLinesChange({
-        type: 'addCartLine',
-        merchandiseId: variantId,
-        quantity: 1,
-      });
-      setAdding(false);
-      if (result.type === 'error') {
-        setShowError(true);
-        console.error(result.message);
-      }
+  async function handleAddToCart(variantId) {
+    setAdding(true);
+    const result = await applyCartLinesChange({
+      type: 'addCartLine',
+      merchandiseId: variantId,
+      quantity: 1,
+    });
+    setAdding(false);
+    if (result.type === 'error') {
+      setShowError(true);
+      console.error(result.message);
     }
+  }
 
   async function fetchProducts() {
     setLoading(true);
     try {
-      const { data } = await query(
+      const { data }: { data?: any } = await query(
         `#graphql
         query ($first: Int!, $query: String!) {
           products(first: $first, query: $query) {
